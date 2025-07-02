@@ -18,6 +18,10 @@ struct PethouseApp: App {
                     .tabItem{
                         Image(systemName: "house.fill")
                     }
+                PaymentView()
+                    .tabItem{
+                        Image(systemName: "dollarsign")
+                    }
             }
             
         }
