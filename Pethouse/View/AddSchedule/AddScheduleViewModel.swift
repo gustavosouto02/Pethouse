@@ -15,6 +15,19 @@ class AddScheduleViewModel{
     var pet: Pet? = nil
     var payment: Payment? = nil
     var selectecCategory: PaymentMethod = .cash
+    var dailyValue: Double = 0
+    var totalValue: Double {
+        return dailyValue * (Double(Calendar.current.dateComponents([.day], from: entryDate, to: exitDate).day ?? 0) + 1)
+        
+    }
+    
+    var numberFormatter: NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.locale = Locale(identifier: "pt_BR")
+        
+        return formatter
+    }
     
     init(){
     }

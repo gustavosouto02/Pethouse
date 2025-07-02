@@ -30,6 +30,7 @@ struct HomeView: View {
             }
             .sheet(isPresented: $viewModel.showAddSchedule) {
                 AddScheduleView()
+                    .presentationDragIndicator(.visible)
             }
         }
 
