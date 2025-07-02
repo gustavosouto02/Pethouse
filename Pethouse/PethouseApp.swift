@@ -6,12 +6,15 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct PethouseApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+            
         }
+        .modelContainer(for: [Payment.self, Pet.self, Schedule.self, Tutor.self])
     }
 }
