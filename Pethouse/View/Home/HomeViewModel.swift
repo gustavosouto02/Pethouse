@@ -9,4 +9,6 @@ import Foundation
 @Observable
 class HomeViewModel {
     
+    var showAddSchedule: Bool = false
+    
 }
