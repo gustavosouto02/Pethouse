@@ -47,5 +47,20 @@ extension PetTutorView {
             context.insert(newTutor)
             fetchAllPetAndTutors()
         }
+        
+        func deletePet(pet: Pet) {
+            context.delete(pet)
+            
+            fetchAllPetAndTutors()
+            
+        }
+        
+        func deleteTutor(tutor: Tutor) {
+            context.delete(tutor)
+            
+            fetchAllPetAndTutors()
+            
+        }
+        
     }
 }
