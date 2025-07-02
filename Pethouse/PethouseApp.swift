@@ -12,7 +12,13 @@ import SwiftData
 struct PethouseApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            
+            TabView {
+                HomeView()
+                    .tabItem{
+                        Image(systemName: "house.fill")
+                    }
+            }
             
         }
         .modelContainer(for: [Payment.self, Pet.self, Schedule.self, Tutor.self])
