@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct HomeView: View {
+    
+    @State var viewModel = HomeViewModel()
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -18,12 +21,15 @@ struct HomeView: View {
             }.toolbar{
                 ToolbarItem(placement: .primaryAction) {
                     Button {
-                        
+                        viewModel.showAddSchedule = true
                     } label: {
                         Image(systemName: "plus")
                     }
-
+                    
                 }
+            }
+            .sheet(isPresented: $viewModel.showAddSchedule) {
+                AddScheduleView()
             }
         }
 
