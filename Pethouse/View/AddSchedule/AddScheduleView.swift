@@ -40,13 +40,13 @@ struct AddScheduleView: View {
                             HStack{
                                 Text("Pet não cadastrado?")
 
-                                                                
-                                    NavigationLink {
-                                        AddPetView()
-                                    } label: {
-                                        Text("Cadastre agora!")
+                                           
+                                Button {
+                                    viewModel.showAddPetView = true
+                                } label: {
+                                    Text("Cadastre agora!")
 
-                                    }
+                                }
                                     .padding(.leading)
                                     .foregroundColor(.accentColor)
                             }
@@ -103,6 +103,9 @@ struct AddScheduleView: View {
                 }
 
             }
+            .sheet(isPresented: $viewModel.showAddPetView, content: {
+                AddPetView()
+            })
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {

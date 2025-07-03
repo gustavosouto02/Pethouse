@@ -17,6 +17,7 @@ class AddScheduleViewModel{
     var selectecCategory: PaymentMethod = .cash
     var dailyValue: Double = 0
     var registeredPet: Bool = false
+    var showAddPetView: Bool = false
     
     
     var mockPets: [Pet] = MockData().pets

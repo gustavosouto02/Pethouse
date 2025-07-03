@@ -18,6 +18,7 @@ struct AddPetView: View {
             VStack {
                 
                 PhotoComponent()
+                    .padding(.top, 50)
                 
                 Spacer()
                     

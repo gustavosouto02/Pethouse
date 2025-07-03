@@ -64,13 +64,14 @@ struct HomeView: View {
                     
                 }
             }
-            .sheet(isPresented: $viewModel.showAddSchedule) {
+            .navigationDestination(isPresented: $viewModel.showAddSchedule, destination: {
                 AddScheduleView()
-                    .presentationDragIndicator(.visible)
-            }
+
+            })
+
         }
 	
-        .padding()
+        //.padding()
     }
 }
 
