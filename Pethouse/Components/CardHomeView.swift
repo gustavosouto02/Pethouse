@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct CardHomeView: View {
-	let schedule: Schedule
+    
+    var schedule: Schedule
 	
     var body: some View {
 		VStack(alignment: .leading, spacing: 16){
@@ -64,6 +65,9 @@ struct CardHomeView: View {
     }
 }
 
-//#Preview {
-//	CardHomeView(schedule: )
-//}
+#Preview {
+    
+     var schedule = MockData().schedules[0]
+    
+	CardHomeView(schedule: schedule)
+}

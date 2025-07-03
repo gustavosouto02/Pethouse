@@ -8,7 +8,7 @@
 import Foundation
 @Observable
 class HomeViewModel {
-    
+    let schedules = MockData().schedules
     var showAddSchedule: Bool = false
     
 }
