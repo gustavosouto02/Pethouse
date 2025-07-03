@@ -11,21 +11,7 @@ struct AddScheduleView: View {
     
     @State var viewModel = AddScheduleViewModel()
     
-
-    fileprivate func logoView() -> some View {
-        Circle()
-            //.foregroundStyle(Color(uiColor: UIColor.systemGroupedBackground))
-            .frame(width: 150, height: 150)
-            .foregroundStyle(.white)
-            .overlay(content: {
-              Image(systemName: "photo.fill")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                    .frame(width: 40)
-                    .foregroundColor(Color.accentColor)
-            })
-    }
-    
+        
     var body: some View {
         NavigationStack {
             ZStack{
@@ -33,17 +19,45 @@ struct AddScheduleView: View {
                     .ignoresSafeArea(edges: .all)
                 VStack {
  
-                    logoView()
-                    
+                    PhotoComponent()
+
                     Spacer()
                     
+                    
                     Form {
+                        
+                        Section(header: Text("Pet")) {
+                            
+                            Picker("Selecione o pet:", selection: $viewModel.pet) {
+                                ForEach(viewModel.mockPets) { pet in
+                                    Text(pet.name)
+                                        .tag(pet)
+
+                                }
+                            }
+                            .pickerStyle(.navigationLink)
+                            
+                            HStack{
+                                Text("Pet não cadastrado?")
+
+                                                                
+                                    NavigationLink {
+                                        AddPetView()
+                                    } label: {
+                                        Text("Cadastre agora!")
+
+                                    }
+                                    .padding(.leading)
+                                    .foregroundColor(.accentColor)
+                            }
+
+                        }
                         Section(header: Text("Datas")) {
                             DatePicker("Data de entrada:", selection: $viewModel.entryDate , displayedComponents: .date)
-                                .padding(.bottom, 10)
+                                .padding(.vertical, 2)
 
                             DatePicker("Data de saida:", selection: $viewModel.exitDate , displayedComponents: .date)
-                                .padding(.bottom, 10)
+                                .padding(.vertical, 2)
                         }
                         
                         Section(header: Text("Pagamento")) {

@@ -22,11 +22,13 @@ struct HomeView: View {
 						HStack {
                             ForEach(viewModel.schedules) { schedule in
                                 CardHomeView(schedule: schedule)
+                                    .shadow(color: Color.gray.opacity(0.3) ,radius: 5)
+                                    .padding(10)
 							}
 						}
 					}
 					.scrollTargetLayout()
-					.padding(.bottom, 60)
+					.padding(.bottom, 20)
 					
 				//}
 	
@@ -37,14 +39,21 @@ struct HomeView: View {
 						HStack {
 							ForEach(viewModel.schedules) { schedule in
 								CardHomeView(schedule: schedule)
+                                    .shadow(color: Color.gray.opacity(0.3) ,radius: 5)
+
+                                    .padding(10)
+
 							}
 						}
 					}
 					.scrollTargetLayout()
 				}
+                
+                Spacer()
 				
 				
             }
+            .navigationTitle("PetHouse")
 			.toolbar{
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {

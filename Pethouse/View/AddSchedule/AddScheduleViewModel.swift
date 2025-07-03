@@ -16,6 +16,11 @@ class AddScheduleViewModel{
     var payment: Payment? = nil
     var selectecCategory: PaymentMethod = .cash
     var dailyValue: Double = 0
+    var registeredPet: Bool = false
+    
+    
+    var mockPets: [Pet] = MockData().pets
+    
     var totalValue: Double {
         return dailyValue * (Double(Calendar.current.dateComponents([.day], from: entryDate, to: exitDate).day ?? 0) + 1)
         

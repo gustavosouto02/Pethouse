@@ -30,3 +30,10 @@ class Pet: Identifiable {
         self.tutors = tutors
     }
 }
+
+
+enum gender: String, CaseIterable, Identifiable, Codable{
+    var id: String { self.rawValue }
+    case male = "male"
+    case female = "female"
+}

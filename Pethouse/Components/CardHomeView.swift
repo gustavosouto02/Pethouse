@@ -17,7 +17,13 @@ struct CardHomeView: View {
 				
 				// TODO: Foto
 				Circle()
+                    .foregroundStyle(Color("PurpleStatus"))
 					.frame(width: 40, height: 40)
+                    .overlay(content: {
+                      Image(systemName: "dog.fill")
+                            .foregroundStyle(Color.white)
+                    })
+                    
 				
 				// TODO: Nome do pet
 				Text(schedule.pet.name)
@@ -56,11 +62,14 @@ struct CardHomeView: View {
 		.background(
 			RoundedRectangle(cornerRadius: 20)
 				.fill(Color.white)
+            
 		)
-		.overlay(
-			RoundedRectangle(cornerRadius: 20)
-				.stroke(Color.accentColor, lineWidth: 1.5)
-		)
+        
+//		.overlay(
+//			RoundedRectangle(cornerRadius: 20)
+//				.stroke(Color.accentColor, lineWidth: 1.5)
+//            
+//		)
 
     }
 }
