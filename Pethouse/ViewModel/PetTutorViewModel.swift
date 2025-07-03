@@ -15,22 +15,73 @@ extension PetTutorView {
         var context: ModelContext
         var pets: [Pet] = []
         var tutors: [Tutor] = []
+        var tutorSearchText: String = ""{
+            didSet {
+                fetchTutors()
+            }
+        }
+        var petSearchText: String = ""{
+            didSet {
+                fetchPets()
+            }
+        }
         
         init(context: ModelContext) {
             self.context = context
             fetchAllPetAndTutors()
         }
         
+//        func fetchAllPetAndTutors() {
+//            do {
+//                let petDescriptor = FetchDescriptor<Pet>(sortBy: [SortDescriptor(\.name)])
+//                var tutorDescriptor = FetchDescriptor<Tutor>(sortBy: [SortDescriptor(\.name)])
+//                
+//                if !searchText.isEmpty {
+//                    tutorDescriptor.predicate = #Predicate { tutor in
+//                        tutor.name.localizedStandardContains(self.searchText)
+//                    }
+//                }
+//                
+//                pets = try context.fetch(petDescriptor)
+//                tutors = try context.fetch(tutorDescriptor)
+//                
+//            } catch {
+//                print("Fetch pet and tutors failed. \(error)")
+//            }
+//        }
+        
         func fetchAllPetAndTutors() {
+            fetchPets()
+            fetchTutors()
+        }
+        
+        func fetchPets() {
             do {
-                let petDescriptor = FetchDescriptor<Pet>(sortBy: [SortDescriptor(\.name)])
-                let tutorDescriptor = FetchDescriptor<Tutor>(sortBy: [SortDescriptor(\.name)])
-                
-                pets = try context.fetch(petDescriptor)
-                tutors = try context.fetch(tutorDescriptor)
-                
+                let descriptor = FetchDescriptor<Pet>(sortBy: [SortDescriptor(\.name)])
+                let allPets = try context.fetch(descriptor)
+
+                if petSearchText.isEmpty {
+                    pets = allPets
+                } else {
+                    pets = allPets.filter { $0.name.localizedStandardContains(petSearchText) }
+                }
             } catch {
-                print("Fetch pet and tutors failed. \(error)")
+                print("Erro ao buscar pets: \(error)")
+            }
+        }
+
+        func fetchTutors() {
+            do {
+                let descriptor = FetchDescriptor<Tutor>(sortBy: [SortDescriptor(\.name)])
+                let allTutors = try context.fetch(descriptor)
+
+                if tutorSearchText.isEmpty {
+                    tutors = allTutors
+                } else {
+                    tutors = allTutors.filter { $0.name.localizedStandardContains(tutorSearchText) }
+                }
+            } catch {
+                print("Erro ao buscar tutores: \(error)")
             }
         }
         
