@@ -47,8 +47,8 @@ struct HomeView: View {
 		whiskersPayment.method = .cash
 
 		_schedules = State(initialValue: [
-			Schedule(entryDate: Date(), exitDate: Calendar.current.date(byAdding: .day, value: 3, to: Date())!, pet: buddyPet, payment: buddyPayment),
-			Schedule(entryDate: Calendar.current.date(byAdding: .day, value: 5, to: Date())!, exitDate: Calendar.current.date(byAdding: .day, value: 7, to: Date())!, pet: whiskersPet, payment: whiskersPayment)
+            Schedule(entryDate: Date(), exitDate: Calendar.current.date(byAdding: .day, value: 3, to: Date())!, pet: buddyPet, payment: buddyPayment, dailyValue: 10),
+            Schedule(entryDate: Calendar.current.date(byAdding: .day, value: 5, to: Date())!, exitDate: Calendar.current.date(byAdding: .day, value: 7, to: Date())!, pet: whiskersPet, payment: whiskersPayment, dailyValue: 10)
 		])
 	}
 
@@ -86,11 +86,11 @@ struct HomeView: View {
 				
             }
 			.toolbar{
-                ToolbarItem(placement: .primaryAction) {
+                ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         viewModel.showAddSchedule = true
                     } label: {
-                        Image(systemName: "plus")
+                        AddScheduleButton()
                     }
                     
                 }
