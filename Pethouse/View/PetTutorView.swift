@@ -83,7 +83,13 @@ struct PetTutorView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        // sheet
+                        if let viewModel = viewModel {
+                            if selectedSection == 0 {
+                                viewModel.addPet(name: "Antonio", age: 7, breed: "", specie: "", gender: "")
+                            } else {
+                                viewModel.addTutor(name: "Ana Luisa", cpf: "", phone: "")
+                            }
+                        }
                     } label: {
                         Image(systemName: "plus")
                             .tint(.accent)
