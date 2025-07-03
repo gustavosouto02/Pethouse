@@ -9,7 +9,9 @@ import SwiftUI
 
 struct AddScheduleView: View {
     
+    @Environment(\.modelContext) var context
     @State var viewModel = AddScheduleViewModel()
+    @Environment(\.dismiss) var dismiss
     
         
     var body: some View {
@@ -109,7 +111,8 @@ struct AddScheduleView: View {
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
-                        
+                        viewModel.addSchedule(context: context)
+                        dismiss()
                     } label: {
                         Text("Salvar")
                     }

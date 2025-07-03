@@ -6,10 +6,23 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct HomeView: View {
     
-     @State var viewModel = HomeViewModel()
+    @State var viewModel = HomeViewModel()
+    @AppStorage("didInsertDefaultReflections") var didInsertDefaults = false
+    @Environment(\.modelContext) var context
+    
+    @Query var schedules: [Schedule]
+    
+    var futureSchedules: [Schedule] {
+        return schedules.filter { $0.entryDate > Date() }
+    }
+    var currentSchedules: [Schedule] {
+        return schedules.filter { $0.entryDate <= Date() }
+    }
+
     	
 
     var body: some View {
@@ -20,7 +33,7 @@ struct HomeView: View {
 						.font(.headline)
 					ScrollView (.horizontal, showsIndicators: false){
 						HStack {
-                            ForEach(viewModel.schedules) { schedule in
+                            ForEach(currentSchedules) { schedule in
                                 CardHomeView(schedule: schedule)
                                     .shadow(color: Color.gray.opacity(0.3) ,radius: 5)
                                     .padding(10)
@@ -37,7 +50,7 @@ struct HomeView: View {
 						.font(.headline)
 					ScrollView (.horizontal, showsIndicators: false) {
 						HStack {
-							ForEach(viewModel.schedules) { schedule in
+							ForEach(futureSchedules) { schedule in
 								CardHomeView(schedule: schedule)
                                     .shadow(color: Color.gray.opacity(0.3) ,radius: 5)
 
@@ -52,6 +65,12 @@ struct HomeView: View {
                 Spacer()
 				
 				
+            }
+            .onAppear(){
+                if !didInsertDefaults {
+                    viewModel.mock.insertMockDataIfNeeded(context: context)
+                    didInsertDefaults = true
+                }
             }
             .navigationTitle("PetHouse")
 			.toolbar{

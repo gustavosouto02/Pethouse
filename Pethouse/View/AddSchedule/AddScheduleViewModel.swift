@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftData
 
 @Observable
 class AddScheduleViewModel{
@@ -33,6 +34,22 @@ class AddScheduleViewModel{
         formatter.locale = Locale(identifier: "pt_BR")
         
         return formatter
+    }
+    
+    func addSchedule(context: ModelContext){
+        
+        guard let Wpet = pet else {
+            return
+        }
+        
+        
+        let paymentFinal = Payment(amount: totalValue)
+        
+        let newSchedule = Schedule(entryDate: entryDate, exitDate: exitDate, pet: Wpet, payment: paymentFinal, dailyValue: dailyValue)
+        
+        context.insert(paymentFinal)
+        context.insert(newSchedule)
+        
     }
     
     init(){
