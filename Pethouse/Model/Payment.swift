@@ -15,9 +15,10 @@ class Payment: Identifiable {
     var status: PaymentStatus
     var method: PaymentMethod?
     
-    init(amount: Double) {
+    init(amount: Double, method: PaymentMethod? = nil) {
         self.amount = amount
         self.status = .pending
+        self.method = method
     }
 }
 

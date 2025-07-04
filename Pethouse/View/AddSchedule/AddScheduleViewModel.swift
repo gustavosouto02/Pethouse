@@ -19,7 +19,7 @@ class AddScheduleViewModel {
         }
     }
     var exitDate = Calendar.current.date(byAdding: .day, value: 1, to: Date()) ?? Date()
-    var pet: Pet? = nil
+    var pet: Pet = Pet()
     var payment: Payment? = nil
     var selectecCategory: PaymentMethod = .cash
     var dailyValue: Double = 0
@@ -48,44 +48,41 @@ class AddScheduleViewModel {
 
     func addSchedule(context: ModelContext) {
 
-        guard let Wpet = pet else {
-            return
-        }
 
         let paymentFinal = Payment(amount: totalValue)
         paymentFinal.method = selectecCategory
 
-        let newSchedule = Schedule(
-            entryDate: entryDate,
-            exitDate: exitDate,
-            pet: Wpet,
-            payment: paymentFinal,
-            dailyValue: dailyValue
-        )
+            let newSchedule = Schedule(
+                entryDate: entryDate,
+                exitDate: exitDate,
+                pet: pet,
+                payment: paymentFinal,
+                dailyValue: dailyValue
+            )
 
-        context.insert(paymentFinal)
-        context.insert(newSchedule)
+            context.insert(paymentFinal)
+            context.insert(newSchedule)
+            
+            
 
     }
 
     func updateSchedule(context: ModelContext, schedule: Schedule) {
-
-        guard let Wpet = pet else {
-            return
-        }
-        let paymentFinal = Payment(amount: totalValue)
+            
+        let paymentFinal = Payment(amount: totalValue, method: selectecCategory)
 
         schedule.entryDate = entryDate
         schedule.exitDate = exitDate
-        schedule.pet = Wpet
+        schedule.pet = pet
         schedule.payment = paymentFinal
         schedule.dailyValue = dailyValue
-
-        do {
+        
+        do{
             try context.save()
-        } catch (_) {
+        }catch(_){
             print("error")
         }
+
 
     }
 

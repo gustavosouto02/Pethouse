@@ -9,22 +9,21 @@ import SwiftData
 import SwiftUI
 
 struct AddScheduleView: View {
-
+    
     @Environment(\.modelContext) var context
     @State var viewModel = AddScheduleViewModel()
     @Environment(\.dismiss) var dismiss
     @Query var pets: [Pet]
-
+    @State private var opened = false
+    
     @State var scheduletoEdit: Schedule?
-
+    
     var body: some View {
         NavigationStack {
             ZStack {
                 Color(uiColor: UIColor.systemGroupedBackground)
                     .ignoresSafeArea(edges: .all)
                 VStack {
-
-
                     Form {
                         
                         Section{
@@ -36,35 +35,34 @@ struct AddScheduleView: View {
                             .listRowInsets(.none)
                             .listRowBackground(Color.clear)
                         }
-
+                        
                         Section(header: Text("Pet")) {
-
+                            
                             Picker(
                                 "Selecione o pet:",
                                 selection: $viewModel.pet
                             ) {
-                                Text("Nenhum").tag(nil as Pet?)
                                 ForEach(pets) { pet in
                                     Text(pet.name)
                                         .tag(pet)
-
+                                    
                                 }
                             }
                             .pickerStyle(.navigationLink)
-
+                            
                             HStack {
                                 Text("Pet não cadastrado?")
-
+                                
                                 Button {
                                     viewModel.showAddPetView = true
                                 } label: {
                                     Text("Cadastre agora!")
-
+                                    
                                 }
                                 .padding(.leading)
                                 .foregroundColor(.accentColor)
                             }
-
+                            
                         }
                         Section(header: Text("Datas")) {
                             DatePicker(
@@ -73,7 +71,7 @@ struct AddScheduleView: View {
                                 displayedComponents: .date
                             )
                             .padding(.vertical, 2)
-
+                            
                             DatePicker(
                                 "Data de saída:",
                                 selection: $viewModel.exitDate,
@@ -84,23 +82,21 @@ struct AddScheduleView: View {
                             )
                             .padding(.vertical, 2)
                         }
-
+                        
                         Section(header: Text("Pagamento")) {
                             Picker(
                                 "Forma de pagamento:",
                                 selection: $viewModel.selectecCategory
                             ) {
-
+                                
                                 ForEach(PaymentMethod.allCases) { method in
                                     Text(method.rawValue.capitalized)
                                         .tag(method)
                                 }
                             }
-
-                            //.padding(.bottom, 10)
-
+                            
                         }
-
+                        
                         Section(header: Text("Diaria:")) {
                             HStack {
                                 Text("Valor da diaria:")
@@ -126,46 +122,47 @@ struct AddScheduleView: View {
                                 .foregroundStyle(Color.accentColor)
                             }
                         }
-
+                        
                         if let schedule = scheduletoEdit {
                             Section(header: Text("Excluir")) {
-
+                                
                                 HStack {
                                     Button(action: {
                                         viewModel.deleteSchedule(
                                             context: context,
                                             schedule: schedule
-
+                                            
                                         )
                                         dismiss()
-
+                                        
                                     }) {
                                         Text("Excluir estadia")
                                             .foregroundStyle(Color.red)
                                     }
-
+                                    
                                     Spacer()
-
+                                    
                                     Image(systemName: "trash")
                                         .foregroundStyle(Color.red)
                                 }
-
+                                
                             }
                         }
-
                     }
-
+                    
                 }
-
+                
             }
             .onAppear {
-                if let schedule = scheduletoEdit {
-                    viewModel.dailyValue = schedule.dailyValue
-                    viewModel.entryDate = schedule.entryDate
-                    viewModel.exitDate = schedule.exitDate > schedule.entryDate
-                        ? schedule.exitDate
-                        : Calendar.current.date(byAdding: .day, value: 1, to: schedule.entryDate) ?? schedule.entryDate
-                    viewModel.pet = schedule.pet
+                if let scheduletoEdit = scheduletoEdit, !opened {
+                    viewModel.pet = scheduletoEdit.pet
+                    viewModel.dailyValue = scheduletoEdit.dailyValue
+                    viewModel.entryDate = scheduletoEdit.entryDate
+                    viewModel.exitDate = scheduletoEdit.exitDate > scheduletoEdit.entryDate
+                        ? scheduletoEdit.exitDate
+                        : Calendar.current.date(byAdding: .day, value: 1, to: scheduletoEdit.entryDate) ?? scheduletoEdit.entryDate
+                    viewModel.selectecCategory = scheduletoEdit.payment.method ?? .cash
+                    opened = true
                 }
             }
 
@@ -178,7 +175,6 @@ struct AddScheduleView: View {
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
-
                         if let scheduletoEdit = scheduletoEdit {
                             viewModel.updateSchedule(
                                 context: context,
@@ -186,14 +182,14 @@ struct AddScheduleView: View {
                             )
                         } else {
                             viewModel.addSchedule(context: context)
-
+                            
                         }
-
+                        
                         dismiss()
                     } label: {
                         Text("Salvar")
                     }
-
+                    
                 }
             }
         }

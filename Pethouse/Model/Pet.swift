@@ -10,7 +10,7 @@ import SwiftData
 
 
 @Model
-class Pet: Identifiable {
+class Pet: Identifiable, Hashable {
     var id = UUID()
     var name: String
     var birthday: Date
@@ -29,6 +29,16 @@ class Pet: Identifiable {
         self.gender = gender
         self.details = details
         self.tutors = tutors
+    }
+    
+    init(){
+        self.name = ""
+        self.birthday = .now
+        self.breed = ""
+        self.specie = ""
+        self.gender = .female
+        self.details = ""
+        self.tutors = []
     }
 }
 
