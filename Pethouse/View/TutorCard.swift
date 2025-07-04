@@ -62,10 +62,10 @@ struct TutorCard: View {
         cpf: "",
         phone: "", pets: [Pet(
             name: "Lucas",
-            age: 7,
+            birthday: Date.now,
             breed: "",
             specie: "",
-            gender: "")
+            gender: .male)
         ]))
 }
 

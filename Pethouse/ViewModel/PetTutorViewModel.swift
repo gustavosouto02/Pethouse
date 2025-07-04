@@ -31,24 +31,6 @@ extension PetTutorView {
             fetchAllPetAndTutors()
         }
         
-//        func fetchAllPetAndTutors() {
-//            do {
-//                let petDescriptor = FetchDescriptor<Pet>(sortBy: [SortDescriptor(\.name)])
-//                var tutorDescriptor = FetchDescriptor<Tutor>(sortBy: [SortDescriptor(\.name)])
-//                
-//                if !searchText.isEmpty {
-//                    tutorDescriptor.predicate = #Predicate { tutor in
-//                        tutor.name.localizedStandardContains(self.searchText)
-//                    }
-//                }
-//                
-//                pets = try context.fetch(petDescriptor)
-//                tutors = try context.fetch(tutorDescriptor)
-//                
-//            } catch {
-//                print("Fetch pet and tutors failed. \(error)")
-//            }
-//        }
         
         func fetchAllPetAndTutors() {
             fetchPets()
@@ -85,18 +67,25 @@ extension PetTutorView {
             }
         }
         
-        func addPet(name: String, age: Int, breed: String, specie: String, gender: String) {
-            let newPet = Pet(name: name, age: age, breed: breed, specie: specie, gender: gender)
-            
+        func addPet(_ newPet: Pet) {
             context.insert(newPet)
-            fetchAllPetAndTutors()
+            do {
+                try context.save()
+                fetchAllPetAndTutors()
+            } catch {
+                print("Erro ao salvar pet: \(error)")
+            }
         }
         
-        func addTutor(name: String, cpf: String, phone: String) {
-            let newTutor = Tutor(name: name, cpf: cpf, phone: phone)
-            
+        func addTutor(_ newTutor: Tutor) {
+
             context.insert(newTutor)
-            fetchAllPetAndTutors()
+            do {
+                try context.save()
+                fetchAllPetAndTutors()
+            } catch {
+                print("Erro ao salvar tutor: \(error)")
+            }
         }
         
         func deletePet(pet: Pet) {

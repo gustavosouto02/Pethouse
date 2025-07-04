@@ -13,20 +13,28 @@ import SwiftData
 class Pet: Identifiable {
     var id = UUID()
     var name: String
-    var age: Int
+    var birthday: Date
     var breed: String //raça
     var specie: String // especie
-    var gender: String
+    var gender: Gender
     var details: String?
     var tutors: [Tutor]
     @Relationship(deleteRule: .cascade, inverse: \Schedule.pet) var schedules: [Schedule]?
 
-    init(name: String, age: Int, breed: String, specie: String, gender: String, tutors: [Tutor] = []) {
+    init(name: String, birthday: Date, breed: String, specie: String, gender: Gender, details: String = "", tutors: [Tutor] = []) {
         self.name = name
-        self.age = age
+        self.birthday = birthday
         self.breed = breed
         self.specie = specie
         self.gender = gender
+        self.details = details
         self.tutors = tutors
     }
+}
+
+enum Gender: String, CaseIterable, Identifiable, Codable{
+    var id: String { self.rawValue }
+    
+    case male = "Macho"
+    case female = "Fêmea"
 }

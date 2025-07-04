@@ -14,6 +14,8 @@ struct PetTutorView: View {
     @State var selectedSection = 0
     @State private var sortOrderPet = [SortDescriptor(\Pet.name)]
     @State private var sortOrderTutor = [SortDescriptor(\Tutor.name)]
+    @State private var presentAddPetSheet = false
+    @State private var presentAddTutorSheet = false
     
     
     var body: some View {
@@ -80,32 +82,51 @@ struct PetTutorView: View {
                     }
                 }
             }
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        if let viewModel = viewModel {
-                            if selectedSection == 0 {
-                                viewModel.addPet(name: "Antonio", age: 7, breed: "", specie: "", gender: "")
-                            } else {
-                                viewModel.addTutor(name: "Ana Luisa", cpf: "", phone: "")
-                            }
-                        }
-                    } label: {
-                        Image(systemName: "plus")
-                            .tint(.accent)
-                    }
-                }
-            }
+            
             .navigationTitle("Title")
-
+            
             .onAppear {
                 if viewModel == nil {
                     viewModel = PetTutorViewModel(context: modelContext)
                 }
             }
+            
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        if(selectedSection == 0){
+                            presentAddPetSheet = true
+                        } else {
+                            presentAddTutorSheet = true
+                        }
+                    } label: {
+                        Image(systemName: "plus")
+                            .tint(.accentColor)
+                    }
+                }
+            }
+            
+            .sheet(isPresented: $presentAddPetSheet) {
+                if let viewModel = viewModel {
+                    AddPetSheetView(isPresented: $presentAddPetSheet, tutors: viewModel.tutors) { pet in
+                        viewModel.addPet(pet)
+                    }
+                }
+            }
+            
+            .sheet(isPresented: $presentAddTutorSheet) {
+                if let viewModel = viewModel {
+                    AddTutorSheetView(isPresented: $presentAddTutorSheet, pets: viewModel.pets) { tutor in
+                        viewModel.addTutor(tutor)
+                    }
+                }
+            }
         }
+        
     }
+    
 }
+
 
 #Preview {
     PetTutorView()
