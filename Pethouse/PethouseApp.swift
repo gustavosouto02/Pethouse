@@ -22,6 +22,10 @@ struct PethouseApp: App {
                     .tabItem{
                         Image(systemName: "dollarsign")
                     }
+                CalendarioEstadiasView()
+                    .tabItem {
+                        Image(systemName: "calendar")
+                    }
             }
             
         }
