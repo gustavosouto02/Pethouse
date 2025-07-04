@@ -15,8 +15,13 @@ struct PethouseApp: App {
             
             TabView {
                 HomeView()
-                    .tabItem{
+                    .tabItem {
                         Image(systemName: "house.fill")
+                    }
+                
+                PetTutorView()
+                    .tabItem {
+                        Image(systemName: "pawprint.fill")
                     }
             }
             
