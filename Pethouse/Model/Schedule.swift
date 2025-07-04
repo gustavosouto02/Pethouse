@@ -14,12 +14,14 @@ class Schedule: Identifiable{
     var entryDate : Date
     var exitDate : Date
     var pet : Pet
+    var dailyValue : Double
     @Relationship(deleteRule: .cascade) var payment: Payment
     
-    init(entryDate: Date, exitDate: Date, pet: Pet, payment: Payment) {
+    init(entryDate: Date, exitDate: Date, pet: Pet, payment: Payment, dailyValue: Double) {
         self.entryDate = entryDate
         self.exitDate = exitDate
         self.pet = pet
         self.payment = payment
-    } 
+        self.dailyValue = dailyValue
+    }
 }
