@@ -14,54 +14,62 @@ struct HomeView: View {
     @AppStorage("didInsertDefaultReflections") var didInsertDefaults = false
     @Environment(\.modelContext) var context
     @State var showCardView: Bool = false
+    @State var scheduleEdtit: Schedule?
     
     @Query var schedules: [Schedule]
     
-    var futureSchedules: [Schedule] {
-        return schedules.filter { $0.entryDate > Date() }
+    var current: [Schedule] {
+        viewModel.filterCurrentSchedules(from: schedules)
     }
-    var currentSchedules: [Schedule] {
-        return schedules.filter { $0.entryDate <= Date() }
+    var future: [Schedule] {
+        viewModel.filterFutureSchedules(from: schedules)
     }
 
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading) {
-                Text("Estadias atuais")
-                    .font(.headline)
-                    .padding(.leading)
-                    .padding(.top, 20)
+                if !current.isEmpty {
+                    Text("Estadias atuais")
+                        .font(.headline)
+                        .padding(.leading)
+                        .padding(.top, 20)
 
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
-                        ForEach(currentSchedules) { schedule in
-                            Button {
-                                showCardView = true
-                            } label: {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            ForEach(current) { schedule in
+                                Button {
+                                    showCardView = true
+                                    scheduleEdtit = schedule
+                                } label: {
+                                    CardHomeView(schedule: schedule)
+                                        .shadow(color: Color.gray.opacity(0.3), radius: 5)
+                                        .padding(10)
+                                }
+                            }
+                        }
+                        .scrollTargetLayout()
+                        .padding(.bottom, 20)
+                    }
+                }
+                
+
+                if !future.isEmpty {
+                    Text("Estadias futuras")
+                        .font(.headline)
+                        .padding(.leading)
+
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            ForEach(future) { schedule in
                                 CardHomeView(schedule: schedule)
                                     .shadow(color: Color.gray.opacity(0.3), radius: 5)
                                     .padding(10)
                             }
                         }
+                        .scrollTargetLayout()
                     }
-                    .scrollTargetLayout()
-                    .padding(.bottom, 20)
                 }
 
-                Text("Estadias futuras")
-                    .font(.headline)
-                    .padding(.leading)
-
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
-                        ForEach(futureSchedules) { schedule in
-                            CardHomeView(schedule: schedule)
-                                .shadow(color: Color.gray.opacity(0.3), radius: 5)
-                                .padding(10)
-                        }
-                    }
-                    .scrollTargetLayout()
-                }
 
                 Spacer()
             }
@@ -78,15 +86,11 @@ struct HomeView: View {
             .navigationDestination(isPresented: $viewModel.showAddSchedule) {
                 AddScheduleView()
             }
-            .navigationDestination(isPresented: $showCardView) {
-                // TODO: colocar os atributos para quando abrir pelo showCardView ele mostrar os dados do card ja cadastrado
-                AddScheduleView()
-            }
+            .navigationDestination(item: $scheduleEdtit , destination: { schedule in
+                AddScheduleView(scheduletoEdit: schedule)
+            })
             .onAppear {
-                if !didInsertDefaults {
-                    viewModel.mock.insertMockDataIfNeeded(context: context)
-                    didInsertDefaults = true
-                }
+                viewModel.insertDefaultDataIfNeeded(context: context, didInsertDefaults: &didInsertDefaults)
             }
         }
     }

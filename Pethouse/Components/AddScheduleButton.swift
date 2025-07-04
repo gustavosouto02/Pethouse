@@ -19,7 +19,7 @@ struct AddScheduleButton: View {
 
         }
         .frame(width: 120, height: 40)
-        .background(Color.accentColor)
+        .background(Color("CyanColor"))
         .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 }
