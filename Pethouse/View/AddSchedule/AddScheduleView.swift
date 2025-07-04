@@ -75,8 +75,11 @@ struct AddScheduleView: View {
                             .padding(.vertical, 2)
 
                             DatePicker(
-                                "Data de saida:",
+                                "Data de saída:",
                                 selection: $viewModel.exitDate,
+                                in: Calendar.current.date(byAdding: .day, value: 1, to: viewModel.entryDate)!
+                                    ...
+                                    Calendar.current.date(byAdding: .year, value: 5, to: viewModel.entryDate)!,
                                 displayedComponents: .date
                             )
                             .padding(.vertical, 2)
@@ -156,14 +159,16 @@ struct AddScheduleView: View {
 
             }
             .onAppear {
-                if let scheduletoEdit = scheduletoEdit {
-                    viewModel.dailyValue = scheduletoEdit.dailyValue
-                    viewModel.entryDate = scheduletoEdit.entryDate
-                    viewModel.exitDate = scheduletoEdit.exitDate
-                    viewModel.pet = scheduletoEdit.pet
-
+                if let schedule = scheduletoEdit {
+                    viewModel.dailyValue = schedule.dailyValue
+                    viewModel.entryDate = schedule.entryDate
+                    viewModel.exitDate = schedule.exitDate > schedule.entryDate
+                        ? schedule.exitDate
+                        : Calendar.current.date(byAdding: .day, value: 1, to: schedule.entryDate) ?? schedule.entryDate
+                    viewModel.pet = schedule.pet
                 }
             }
+
             .sheet(
                 isPresented: $viewModel.showAddPetView,
                 content: {

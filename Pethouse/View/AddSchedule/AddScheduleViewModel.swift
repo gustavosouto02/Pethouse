@@ -10,9 +10,15 @@ import SwiftData
 
 @Observable
 class AddScheduleViewModel {
-
-    var entryDate = Date()
-    var exitDate = Date()
+    
+    var entryDate = Date() {
+        didSet {
+            if exitDate <= entryDate {
+                exitDate = Calendar.current.date(byAdding: .day, value: 1, to: entryDate) ?? entryDate
+            }
+        }
+    }
+    var exitDate = Calendar.current.date(byAdding: .day, value: 1, to: Date()) ?? Date()
     var pet: Pet? = nil
     var payment: Payment? = nil
     var selectecCategory: PaymentMethod = .cash
@@ -47,6 +53,7 @@ class AddScheduleViewModel {
         }
 
         let paymentFinal = Payment(amount: totalValue)
+        paymentFinal.method = selectecCategory
 
         let newSchedule = Schedule(
             entryDate: entryDate,
