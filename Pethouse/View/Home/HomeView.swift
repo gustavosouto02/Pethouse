@@ -51,59 +51,69 @@ struct HomeView: View {
                         }
                         .frame(maxWidth: .infinity, minHeight: 280)
                         .padding()
-                    }else if !current.isEmpty {
-                        Text("Estadias atuais")
-                            .font(.headline)
-                            .padding(.leading)
-                            .padding(.top, 20)
+                    }else{
+                        if !current.isEmpty {
+                            Text("Estadias atuais")
+                                .font(.headline)
+                                .padding(.leading)
+                                .padding(.top, 20)
 
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack {
-                                ForEach(current) { schedule in
-                                    Button {
-                                        showCardView = true
-                                        scheduleEdtit = schedule
-                                    } label: {
-                                        CardHomeView(schedule: schedule)
-                                            .shadow(
-                                                color: Color.gray.opacity(0.3),
-                                                radius: 5
-                                            )
-                                            .padding(10)
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack {
+                                    ForEach(current) { schedule in
+                                        Button {
+                                            showCardView = true
+                                            scheduleEdtit = schedule
+                                        } label: {
+                                            CardHomeView(schedule: schedule)
+                                                .shadow(
+                                                    color: Color.gray.opacity(0.3),
+                                                    radius: 5
+                                                )
+                                                .padding(10)
+                                        }
                                     }
                                 }
+                                .scrollTargetLayout()
+                                .padding(.bottom, 20)
                             }
-                            .scrollTargetLayout()
-                            .padding(.bottom, 20)
                         }
-                    }else if !future.isEmpty {
-                        Text("Estadias futuras")
-                            .font(.headline)
-                            .padding(.leading)
+                        if !future.isEmpty {
+                            Text("Estadias futuras")
+                                .font(.headline)
+                                .padding(.leading)
 
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack {
-                                ForEach(future) { schedule in
-                                    Button {
-                                        showCardView = true
-                                        scheduleEdtit = schedule
-                                    } label: {
-                                        CardHomeView(schedule: schedule)
-                                            .shadow(
-                                                color: Color.gray.opacity(0.3),
-                                                radius: 5
-                                            )
-                                            .padding(10)
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack {
+                                    ForEach(future) { schedule in
+                                        Button {
+                                            showCardView = true
+                                            scheduleEdtit = schedule
+                                        } label: {
+                                            CardHomeView(schedule: schedule)
+                                                .shadow(
+                                                    color: Color.gray.opacity(0.3),
+                                                    radius: 5
+                                                )
+                                                .padding(10)
+                                        }
                                     }
                                 }
+                                .scrollTargetLayout()
                             }
-                            .scrollTargetLayout()
                         }
                     }
+                    
+                    
 
                     Spacer()
-
+                    Text("Calendario")
+                        .font(.headline)
+                        .padding(.leading)
+                        .padding(.top, 20)
                     CalendarScheduleView()
+                        .padding(.horizontal, 30)
+                        .padding(.top, 15)
                 }
             }
             .navigationTitle("PetHouse")

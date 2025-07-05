@@ -40,6 +40,15 @@ struct CalendarScheduleView: View {
                 showDetails = !filtered.isEmpty
             }
         )
+        .overlay{
+            RoundedRectangle(cornerRadius: 24)
+                .foregroundColor(.white)
+
+                
+                .shadow(radius: 8)
+                .opacity(0.3)
+        }
+
         
         .onChange(of: schedules) { _, _ in updateSelectedSchedules() }
         .onChange(of: selectedDate) { _, _ in updateSelectedSchedules() }
