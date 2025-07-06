@@ -9,7 +9,6 @@ import SwiftUI
 
 struct AddPetSheetView: View {
     @Binding var isPresented: Bool
-    @State var tutors: [Tutor] = []
     var onAdd: (Pet) -> Void
     
     @State private var name = ""
@@ -41,14 +40,14 @@ struct AddPetSheetView: View {
                     TextField("Espécie", text: $specie)
                     TextField("Raça", text: $breed)
                     
-                    DatePicker("Aniversário", selection: $birthday, displayedComponents: .date)
+                    DatePicker("Aniversário", selection: $birthday,  in: ...Date.now, displayedComponents: .date)
                     
                     Picker("Gênero", selection: $gender) {
                         Text("Macho").tag(Gender.male)
                         Text("Fêmea").tag(Gender.female)
                     }
                 }
-    
+                
                 
                 Section(header: Text("Tutores")) {
                     Picker("Opção", selection: $tutorInputType) {
@@ -59,21 +58,19 @@ struct AddPetSheetView: View {
                     .pickerStyle(SegmentedPickerStyle())
                     
                     if tutorInputType == .select {
-                        Picker("Selecionar Tutor", selection: $selectedTutor) {
-                            Text("Selecione um tutor").tag(Optional<Tutor>.none)
-                            ForEach(tutors) { tutor in
-                                Text(tutor.name).tag(Optional(tutor))
-                            }
-                        }
-                        
-                        if let selectedTutor {
-                            Button {
-                                if !addedTutors.contains(selectedTutor) {
-                                    addedTutors.append(selectedTutor)
+                        NavigationLink {
+                            TutorSelectionView(selectedTutors: $addedTutors){tutor in
+                                let tutorAlredyAddedIndex = addedTutors.firstIndex { item in
+                                    item.id == tutor.id
                                 }
-                            } label: {
-                                Label("Adicionar Tutor", systemImage: "plus")
+                                if let tutorToBeRemoved = tutorAlredyAddedIndex {
+                                    addedTutors.remove(at: tutorToBeRemoved)
+                                }else {
+                                    addedTutors.append(tutor)
+                                }
                             }
+                        } label: {
+                            Text("Selecione um tutor")
                         }
                     }
                     
@@ -84,7 +81,6 @@ struct AddPetSheetView: View {
                         
                         Button {
                             let newTutor = Tutor(name: newTutorName, cpf: newTutorCPF, phone: newTutorPhone)
-                            tutors.append(newTutor)
                             addedTutors.append(newTutor)
                             selectedTutor = newTutor
                             newTutorName = ""
@@ -98,17 +94,18 @@ struct AddPetSheetView: View {
                     }
                     
                     
-                    if !addedTutors.isEmpty {
-                        Section(header: Text("Tutores adicionados")) {
-                            ForEach(addedTutors) { tutor in
-                                HStack {
-                                    Text(tutor.name)
-                                    Spacer()
-                                    Button(role: .destructive) {
-                                        addedTutors.removeAll { $0 == tutor }
-                                    } label: {
-                                        Image(systemName: "minus.circle.fill")
-                                    }
+                }
+                
+                if !addedTutors.isEmpty {
+                    Section {
+                        ForEach(addedTutors) { tutor in
+                            HStack {
+                                Text(tutor.name)
+                                Spacer()
+                                Button(role: .destructive) {
+                                    addedTutors.removeAll { $0 == tutor }
+                                } label: {
+                                    Image(systemName: "minus.circle.fill")
                                 }
                             }
                         }
@@ -143,24 +140,6 @@ struct AddPetSheetView: View {
     }
 }
 
-struct MultipleSelectionRow: View {
-    var title: String
-    var isSelected: Bool
-    var action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            HStack {
-                Text(title)
-                Spacer()
-                if isSelected {
-                    Image(systemName: "checkmark")
-                        .foregroundColor(.blue)
-                }
-            }
-        }
-    }
-}
 
 #Preview {
     AddPetSheetView(isPresented: .constant(true)){_ in

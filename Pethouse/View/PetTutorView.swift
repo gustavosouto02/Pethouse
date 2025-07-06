@@ -25,31 +25,17 @@ struct PetTutorView: View {
             VStack {
                 if let viewModel = viewModel {
                     
-                    Picker("", selection: $selectedSection) {
-                        Text("Pets")
-                            .tag(0)
-                        
-                        Text("Tutores")
-                            .tag(1)
-                    }
-                    .pickerStyle(.palette)
-                    .colorMultiply(.accentColor)
-                    .padding(.horizontal, 24)
-                    
-                    
-                    if selectedSection == 0 {
-                        List {
-                            ForEach(viewModel.pets) { pet in
-                                PetCard(pet: pet)
-                                    .buttonStyle(.plain)
-                                    .listRowSeparator(.hidden)
-                                    .swipeActions {
-                                        Button(role: .destructive) {
-                                            viewModel.deletePet(pet: pet)
-                                            
-                                        } label: {
-                                            Label("Deletar", systemImage: "trash")
-                                        }
+                    List {
+                        ForEach(viewModel.pets) { pet in
+                            PetCard(pet: pet)
+                                .buttonStyle(.plain)
+                                .listRowSeparator(.hidden)
+                                .swipeActions {
+                                    Button(role: .destructive) {
+                                        viewModel.deletePet(pet: pet)
+                                        
+                                    } label: {
+                                        Label("Deletar", systemImage: "trash")
                                     }
                                     .onTapGesture {
                                         presentDetailsSheet.toggle()
@@ -60,39 +46,17 @@ struct PetTutorView: View {
                             
                             
                         }
-                        .listStyle(.plain)
-                        .searchable(text: Binding(
-                            get: { viewModel.petSearchText },
-                            set: { viewModel.petSearchText = $0 }
-                        ))
-                        //PetView(searchString: searchingString, sortOrder: sortOrderPet)
-                        
-                    } else {
-                        List {
-                            ForEach(viewModel.tutors) { tutor in
-                                TutorCard(tutor: tutor)
-                                    .buttonStyle(.plain)
-                                    .listRowSeparator(.hidden)
-                                    .swipeActions {
-                                        Button(role: .destructive) {
-                                            viewModel.deleteTutor(tutor: tutor)
-                                        } label: {
-                                            Label("Deletar", systemImage: "trash")
-                                        }
-                                    }
-                            }
-                        }
-                        .listStyle(.plain)
-                        .searchable(text: Binding(
-                            get: { viewModel.tutorSearchText },
-                            set: { viewModel.tutorSearchText = $0 }
-                        ))
-                        //TutorView(searchString: searchingString, sortOrder: sortOrderTutor)
                     }
+                    .listStyle(.plain)
+                    .searchable(text: Binding(
+                        get: { viewModel.petSearchText },
+                        set: { viewModel.petSearchText = $0 }
+                    ))
+                    
                 }
             }
             
-            .navigationTitle("Title")
+            .navigationTitle("Pets")
             
             .onAppear {
                 if viewModel == nil {
@@ -117,7 +81,7 @@ struct PetTutorView: View {
             
             .sheet(isPresented: $presentAddPetSheet) {
                 if let viewModel = viewModel {
-                    AddPetSheetView(isPresented: $presentAddPetSheet, tutors: viewModel.tutors) { pet in
+                    AddPetSheetView(isPresented: $presentAddPetSheet) { pet in
                         viewModel.addPet(pet)
                     }
                 }
