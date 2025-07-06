@@ -8,10 +8,10 @@
 import Foundation
 import SwiftData
 
-extension PetTutorView {
+extension PetsView {
     
     @Observable
-    class PetTutorViewModel {
+    class PetsViewModel {
         var context: ModelContext
         var pets: [Pet] = []
         var tutors: [Tutor] = []

@@ -169,7 +169,9 @@ struct AddScheduleView: View {
             .sheet(
                 isPresented: $viewModel.showAddPetView,
                 content: {
-                    AddPetView()
+                    AddPetSheetView(isPresented: $viewModel.showAddPetView){_ in 
+                        //
+                    }
                 }
             )
             .toolbar {

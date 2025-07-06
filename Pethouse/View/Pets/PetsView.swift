@@ -8,9 +8,9 @@
 import SwiftUI
 import SwiftData
 
-struct PetTutorView: View {
+struct PetsView: View {
     @Environment(\.modelContext) private var modelContext
-    @State var viewModel: PetTutorViewModel? = nil
+    @State var viewModel: PetsViewModel? = nil
     @State var selectedSection = 0
     @State private var sortOrderPet = [SortDescriptor(\Pet.name)]
     @State private var sortOrderTutor = [SortDescriptor(\Tutor.name)]
@@ -60,7 +60,7 @@ struct PetTutorView: View {
             
             .onAppear {
                 if viewModel == nil {
-                    viewModel = PetTutorViewModel(context: modelContext)
+                    viewModel = PetsViewModel(context: modelContext)
                 }
             }
             
