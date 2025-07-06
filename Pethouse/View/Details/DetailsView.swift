@@ -21,7 +21,15 @@ struct DetailsView: View {
                 Section {
                     HStack {
                         Spacer()
-                        PhotoComponent()
+                        if let data = pet.image, let image = UIImage(data: data) {
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 150, height: 150)
+                                .clipShape(Circle())
+                        } else {
+                            PhotoComponent()
+                        }
                         Spacer()
                     }
                     .listRowInsets(.none)

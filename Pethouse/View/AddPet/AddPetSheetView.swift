@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct AddPetSheetView: View {
     @Binding var isPresented: Bool
@@ -17,6 +18,8 @@ struct AddPetSheetView: View {
     @State private var birthday = Date.now
     @State private var gender: Gender = .male
     @State private var details: String = ""
+    @State private var selectedPhoto: PhotosPickerItem? = nil
+    @State private var selectedImageData: Data? = nil
     
     enum TutorInputType: String, CaseIterable, Identifiable {
         case select = "Selecionar existente"
@@ -35,6 +38,47 @@ struct AddPetSheetView: View {
     var body: some View {
         NavigationStack {
             Form {
+                Section {
+                    HStack {
+                        Spacer()
+                        
+                        if let data = selectedImageData, let image = UIImage(data: data) {
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 150, height: 150)
+                                .clipShape(Circle())
+                        } else {
+                            PhotoComponent()
+                        }
+                        
+                        Spacer()
+                    }
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(.none)
+                    .listRowBackground(Color.clear)
+                    
+                    
+                    HStack {
+                        Spacer()
+                        
+                        PhotosPicker(selection: $selectedPhoto, matching: .images) {
+                            Text("Selecionar Foto")
+                        }
+                        
+                        Spacer()
+                    }
+                    .listRowInsets(.none)
+                    .listRowBackground(Color.clear)
+                    .onChange(of: selectedPhoto) {
+                        Task {
+                            if let data = try? await selectedPhoto?.loadTransferable(type: Data.self) {
+                                selectedImageData = data
+                            }
+                        }
+                    }
+                }
+                
                 Section(header: Text("Informações básicas")){
                     TextField("Nome", text: $name)
                     TextField("Espécie", text: $specie)
@@ -129,7 +173,7 @@ struct AddPetSheetView: View {
                 
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Adicionar") {
-                        let newPet = Pet(name: name, birthday: birthday, breed: breed, specie: specie, gender: gender, details: details, tutors: addedTutors)
+                        let newPet = Pet(name: name, birthday: birthday, breed: breed, specie: specie, gender: gender, details: details, tutors: addedTutors, image: selectedImageData)
                         onAdd(newPet)
                         isPresented = false
                     }

@@ -15,22 +15,28 @@ struct CardHomeView: View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(alignment: .center) {
 
-                // TODO: Foto
-                Circle()
-                    .foregroundStyle(Color("PurpleStatus"))
-                    .frame(width: 40, height: 40)
-                    .overlay(content: {
-                        Image(systemName: "dog.fill")
-                            .foregroundStyle(Color.white)
-                    })
-
-                // TODO: Nome do pet
+                if let data = schedule.pet.image, let image = UIImage(data: data) {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 40, height: 40)
+                        .clipShape(Circle())
+                } else {
+                    Circle()
+                        .foregroundStyle(Color("PurpleStatus"))
+                        .frame(width: 40, height: 40)
+                        .overlay(content: {
+                            Image(systemName: "dog.fill")
+                                .foregroundStyle(Color.white)
+                        })
+                }
+                
                 Text(schedule.pet.name)
                     .font(.subheadline)
             }
 
             HStack {
-                // TODO: Nome do tutor
+               
                 Text("Tutor: \(schedule.pet.tutors[0].name)")
                     .font(.footnote)
                     .foregroundStyle(Color.gray)

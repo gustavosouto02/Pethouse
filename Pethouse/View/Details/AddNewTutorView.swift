@@ -62,15 +62,6 @@ struct AddNewTutorView: View {
                     }
                 }
                 
-//                Section {
-//                    HStack {
-//                        Spacer()
-//                        PhotoComponent()
-//                        Spacer()
-//                    }
-//                    .listRowInsets(.none)
-//                    .listRowBackground(Color.clear)
-//                }
                 
                 Section(header: Text("Informações do Tutor")) {
                     TextField("Nome", text: $name)

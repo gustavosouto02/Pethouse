@@ -15,11 +15,20 @@ struct PetCard: View {
             ZStack {
                 HStack{
                     ZStack {
-                        Circle()
-                            .fill(.gray)
-                            .frame(width: 50, height: 50)
-                        Image(systemName: "photo")
-                            .foregroundStyle(.white)
+                        if let data = pet.image, let image = UIImage(data: data) {
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 50, height: 50)
+                                .clipShape(Circle())
+                        } else {
+                            Circle()
+                                .fill(.gray)
+                                .frame(width: 50, height: 50)
+                            Image(systemName: "photo")
+                                .foregroundStyle(.white)
+                        }
+
                     }
                     
                     .padding(.horizontal)

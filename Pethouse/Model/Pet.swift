@@ -19,9 +19,11 @@ class Pet: Identifiable, Hashable {
     var gender: Gender
     var details: String?
     var tutors: [Tutor]
+    var image: Data?
+    
     @Relationship(deleteRule: .cascade, inverse: \Schedule.pet) var schedules: [Schedule]?
 
-    init(name: String, birthday: Date, breed: String, specie: String, gender: Gender, details: String = "", tutors: [Tutor] = []) {
+    init(name: String, birthday: Date, breed: String, specie: String, gender: Gender, details: String = "", tutors: [Tutor] = [], image: Data? = nil) {
         self.name = name
         self.birthday = birthday
         self.breed = breed
@@ -29,6 +31,7 @@ class Pet: Identifiable, Hashable {
         self.gender = gender
         self.details = details
         self.tutors = tutors
+        self.image = image
     }
     
     init(){

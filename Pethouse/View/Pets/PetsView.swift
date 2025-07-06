@@ -19,7 +19,7 @@ struct PetsView: View {
     @State private var presentDetailsSheet = false
     @State private var selectedPet: Pet?
     
-    
+
     var body: some View {
         NavigationStack {
             VStack {
@@ -28,6 +28,10 @@ struct PetsView: View {
                     List {
                         ForEach(viewModel.pets) { pet in
                             PetCard(pet: pet)
+                                .onTapGesture {
+                                    presentDetailsSheet.toggle()
+                                    selectedPet = pet
+                                }
                                 .buttonStyle(.plain)
                                 .listRowSeparator(.hidden)
                                 .swipeActions {
@@ -37,14 +41,7 @@ struct PetsView: View {
                                     } label: {
                                         Label("Deletar", systemImage: "trash")
                                     }
-                                    .onTapGesture {
-                                        presentDetailsSheet.toggle()
-                                        selectedPet = pet
-                                    }
-                                
                             }
-                            
-                            
                         }
                     }
                     .listStyle(.plain)
