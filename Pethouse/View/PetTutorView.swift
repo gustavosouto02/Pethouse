@@ -16,6 +16,8 @@ struct PetTutorView: View {
     @State private var sortOrderTutor = [SortDescriptor(\Tutor.name)]
     @State private var presentAddPetSheet = false
     @State private var presentAddTutorSheet = false
+    @State private var presentDetailsSheet = false
+    @State private var selectedPet: Pet?
     
     
     var body: some View {
@@ -49,7 +51,14 @@ struct PetTutorView: View {
                                             Label("Deletar", systemImage: "trash")
                                         }
                                     }
+                                    .onTapGesture {
+                                        presentDetailsSheet.toggle()
+                                        selectedPet = pet
+                                    }
+                                
                             }
+                            
+                            
                         }
                         .listStyle(.plain)
                         .searchable(text: Binding(
@@ -114,13 +123,15 @@ struct PetTutorView: View {
                 }
             }
             
-            .sheet(isPresented: $presentAddTutorSheet) {
+            .sheet(isPresented: $presentDetailsSheet) {
                 if let viewModel = viewModel {
-                    AddTutorSheetView(isPresented: $presentAddTutorSheet, pets: viewModel.pets) { tutor in
-                        viewModel.addTutor(tutor)
+                    if let pet = selectedPet {
+                        DetailsView(pet: pet, deleteTutor: viewModel.deleteTutor)
                     }
                 }
             }
+            
+           
         }
         
     }
@@ -128,6 +139,6 @@ struct PetTutorView: View {
 }
 
 
-#Preview {
-    PetTutorView()
-}
+//#Preview {
+//    PetTutorView()
+//}
