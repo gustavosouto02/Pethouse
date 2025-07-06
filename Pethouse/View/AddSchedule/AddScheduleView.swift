@@ -50,18 +50,6 @@ struct AddScheduleView: View {
                             }
                             .pickerStyle(.navigationLink)
                             
-                            HStack {
-                                Text("Pet não cadastrado?")
-                                
-                                Button {
-                                    viewModel.showAddPetView = true
-                                } label: {
-                                    Text("Cadastre agora!")
-                                    
-                                }
-                                .padding(.leading)
-                                .foregroundColor(.accentColor)
-                            }
                             
                         }
                         Section(header: Text("Datas")) {
@@ -107,7 +95,6 @@ struct AddScheduleView: View {
                                     formatter: viewModel.numberFormatter
                                 )
                                 .keyboardType(.numberPad)
-                                //.textFieldStyle(.roundedBorder)
                                 .frame(width: 100, height: 0)
                             }
                             HStack {
@@ -166,14 +153,6 @@ struct AddScheduleView: View {
                 }
             }
 
-            .sheet(
-                isPresented: $viewModel.showAddPetView,
-                content: {
-                    AddPetSheetView(isPresented: $viewModel.showAddPetView){_ in 
-                        //
-                    }
-                }
-            )
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
