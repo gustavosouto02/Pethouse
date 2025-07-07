@@ -13,10 +13,6 @@ import PhotosUI
 struct TutorsDetailsView: View {
     @State var pet: Pet
     @State var tutor: Tutor
-    @State var name: String = ""
-    @State var cpf: String = ""
-    @State var phone: String = ""
-    @State var image: Data? = nil
     @State var isEditing: Bool = false
     @State var save: Bool = false
     @State private var selectedPhoto: PhotosPickerItem? = nil
@@ -60,7 +56,7 @@ struct TutorsDetailsView: View {
                         .onChange(of: selectedPhoto) {
                             Task {
                                 if let data = try? await selectedPhoto?.loadTransferable(type: Data.self) {
-                                    image = data
+                                    tutor.image = data
                                 }
                             }
                         }
@@ -78,7 +74,7 @@ struct TutorsDetailsView: View {
                         if !isEditing {
                             Text(tutor.name)
                         } else {
-                            TextField(tutor.name, text: $name)
+                            TextField(tutor.name, text: $tutor.name)
                                 .multilineTextAlignment(.trailing)
                                 .foregroundStyle(.gray)
                         }
@@ -96,7 +92,7 @@ struct TutorsDetailsView: View {
                         if !isEditing {
                             Text(tutor.cpf)
                         } else {
-                            TextField(tutor.cpf, text: $cpf)
+                            TextField(tutor.cpf, text: $tutor.cpf)
                                 .multilineTextAlignment(.trailing)
                                 .foregroundStyle(.gray)
                         }
@@ -114,7 +110,7 @@ struct TutorsDetailsView: View {
                         if !isEditing {
                             Text(tutor.phone)
                         } else {
-                            TextField("", text: $phone)
+                            TextField(tutor.phone, text: $tutor.phone)
                                 .multilineTextAlignment(.trailing)
                                 .foregroundStyle(.gray)
                         }
@@ -125,16 +121,7 @@ struct TutorsDetailsView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button {
-                        if isEditing && !name.isEmpty && !cpf.isEmpty && phone.isEmpty && image != nil {
-                            tutor.name = name
-                            tutor.cpf = cpf
-                            tutor.phone = phone
-                            tutor.image = image
-                        }
-                        
                         isEditing.toggle()
-                        
-                        
                     } label: {
                         if isEditing {
                             Text("OK")
