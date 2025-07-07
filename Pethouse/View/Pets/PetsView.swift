@@ -87,7 +87,9 @@ struct PetsView: View {
             .sheet(isPresented: $presentDetailsSheet) {
                 if let viewModel = viewModel {
                     if let pet = selectedPet {
-                        DetailsView(pet: pet, deleteTutor: viewModel.deleteTutor)
+                        NavigationStack {
+                            DetailsView(pet: pet, deleteTutor: viewModel.deleteTutor)
+                        }
                     }
                 }
             }

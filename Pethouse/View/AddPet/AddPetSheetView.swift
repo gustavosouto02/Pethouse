@@ -13,7 +13,7 @@ struct AddPetSheetView: View {
     var onAdd: (Pet) -> Void
     
     @State private var name = ""
-    @State private var specie = ""
+    @State private var specie: Specie = .dog
     @State private var breed = ""
     @State private var birthday = Date.now
     @State private var gender: Gender = .male
@@ -79,9 +79,14 @@ struct AddPetSheetView: View {
                     }
                 }
                 
-                Section(header: Text("Informações básicas")){
+                Section(header: Text("Informações básicas")) {
                     TextField("Nome", text: $name)
-                    TextField("Espécie", text: $specie)
+                    
+                    Picker("Espécie", selection: $specie) {
+                        Text("Cachorro").tag(Specie.dog)
+                        Text("Gato").tag(Specie.cat)
+                    }
+                    
                     TextField("Raça", text: $breed)
                     
                     DatePicker("Aniversário", selection: $birthday,  in: ...Date.now, displayedComponents: .date)
@@ -177,7 +182,7 @@ struct AddPetSheetView: View {
                         onAdd(newPet)
                         isPresented = false
                     }
-                    .disabled(name.isEmpty || specie.isEmpty || breed.isEmpty)
+                    .disabled(name.isEmpty || specie.rawValue.isEmpty || breed.isEmpty)
                 }
             }
         }

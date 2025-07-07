@@ -31,8 +31,8 @@ struct MockData {
 
         payments = [buddyPayment, whiskersPayment]
 
-        let buddyPet = Pet(name: "Buddy", birthday: Date.now, breed: "Golden Retriever", specie: "Cão", gender: .male, tutors: [tutors[0], tutors[1]])
-        let whiskersPet = Pet(name: "Whiskers", birthday: Date.now, breed: "Siamês", specie: "Gato", gender: .female, tutors: [tutors[2]])
+        let buddyPet = Pet(name: "Buddy", birthday: Date.now, breed: "Golden Retriever", specie: .dog, gender: .male, tutors: [tutors[0], tutors[1]])
+        let whiskersPet = Pet(name: "Whiskers", birthday: Date.now, breed: "Siamês", specie: .cat, gender: .female, tutors: [tutors[2]])
 
         pets = [buddyPet, whiskersPet]
 

@@ -70,7 +70,7 @@ struct PetCard: View {
         name: "Lucas",
         birthday: Date.now,
         breed: "Spitz Alemao",
-        specie: "",
+        specie: .dog,
         gender: .male,
         tutors: [Tutor(
             name: "Ana",

@@ -14,9 +14,10 @@ struct DetailsView: View {
     @Environment(\.dismiss) var dismiss
     @State var pet: Pet
     @State var deleteTutor: (Tutor) -> Void
-        
+    @State var isEditing: Bool = false
+    @State private var selectedPhoto: PhotosPickerItem? = nil
+    
     var body: some View {
-        NavigationStack {
             Form {
                 Section {
                     HStack {
@@ -32,11 +33,33 @@ struct DetailsView: View {
                         }
                         Spacer()
                     }
+                    .listRowSeparator(.hidden)
                     .listRowInsets(.none)
                     .listRowBackground(Color.clear)
+                    
+                    if isEditing {
+                        HStack {
+                            Spacer()
+                            
+                            PhotosPicker(selection: $selectedPhoto, matching: .images) {
+                                Text("Selecionar Foto")
+                            }
+                            
+                            Spacer()
+                        }
+                        .listRowInsets(.none)
+                        .listRowBackground(Color.clear)
+                        .onChange(of: selectedPhoto) {
+                            Task {
+                                if let data = try? await selectedPhoto?.loadTransferable(type: Data.self) {
+                                    pet.image = data
+                                }
+                            }
+                        }
+                    }
                 }
                 
-                    
+                
                 Section(header: Text("Informações do pet")) {
                     HStack {
                         Image(systemName: "pawprint.fill")
@@ -45,7 +68,14 @@ struct DetailsView: View {
                         
                         Spacer()
                         
-                        Text(pet.name)
+                        if !isEditing {
+                            Text(pet.name)
+                        } else {
+                            TextField(pet.name, text: $pet.name)
+                                .multilineTextAlignment(.trailing)
+                                .foregroundStyle(.gray)
+                        }
+                        
                     }
                     
                     HStack {
@@ -55,7 +85,13 @@ struct DetailsView: View {
                         
                         Spacer()
                         
-                        Text(pet.birthday.formatted(date: .abbreviated, time: .omitted))
+                        if !isEditing {
+                            Text(pet.birthday.formatted(date: .abbreviated, time: .omitted))
+                        } else {
+                            DatePicker("", selection: $pet.birthday,  in: ...Date.now, displayedComponents: .date)
+                                .frame(width: 100)
+                        }
+                        
                     }
                     
                     HStack {
@@ -65,18 +101,33 @@ struct DetailsView: View {
                         
                         Spacer()
                         
-                        Text(pet.breed)
+                        if !isEditing {
+                            Text(pet.breed)
+                        } else {
+                            TextField(pet.breed, text: $pet.breed)
+                                .multilineTextAlignment(.trailing)
+                                .foregroundStyle(.gray)
+                        }
+                        
                     }
                     
                     HStack {
-                        Image(systemName: pet.specie.lowercased() == "gato" ? "cat.fill" : "dog.fill")
+                        Image(systemName: pet.specie == .cat ? "cat.fill" : "dog.fill")
                             .foregroundStyle(.accent)
                             .frame(width: 18)
                         Text("Espécie:")
                         
                         Spacer()
                         
-                        Text(pet.specie)
+                        if !isEditing {
+                            Text(pet.specie.rawValue)
+                        } else {
+                            Picker("", selection: $pet.specie) {
+                                Text("Cachorro").tag(Specie.dog)
+                                Text("Gato").tag(Specie.cat)
+                            }
+                            .frame(width: 150)
+                        }
                     }
                     
                     HStack {
@@ -88,12 +139,20 @@ struct DetailsView: View {
                         
                         Spacer()
                         
-                        Text(pet.gender.rawValue)
+                        if !isEditing {
+                            Text(pet.gender.rawValue)
+                        } else {
+                            Picker("", selection: $pet.gender) {
+                                Text("Macho").tag(Gender.male)
+                                Text("Fêmea").tag(Gender.female)
+                            }
+                            .frame(width: 150)
+                        }
                     }
                 }
                 
-                
-                Section(header: Text("Tutores")) {
+                if !isEditing {
+                    Section(header: Text("Tutores")) {
                         List {
                             ForEach(pet.tutors) { tutor in
                                 NavigationLink(destination: TutorsDetailsView(pet: pet, tutor: tutor)) {
@@ -116,22 +175,26 @@ struct DetailsView: View {
                             }
                             
                         }
-                    
-                    
+                        
+                        
+                    }
+                }
+                
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        isEditing.toggle()
+                    }, label: {
+                        if !isEditing {
+                            Text("Editar")
+                        } else {
+                            Text("OK")
+                        }
+                        
+                    })
                 }
             }
-        }
-        .navigationTitle(pet.name)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: {
-                    dismiss()
-                }, label: {
-                    Text("OK")
-                })
-            }
-        }
     }
 }
 

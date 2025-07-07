@@ -25,7 +25,6 @@ struct AddScheduleView: View {
                     .ignoresSafeArea(edges: .all)
                 VStack {
                     Form {
-                        
                         Section{
                             HStack {
                                 Spacer()

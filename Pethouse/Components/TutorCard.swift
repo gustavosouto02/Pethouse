@@ -64,7 +64,7 @@ struct TutorCard: View {
             name: "Lucas",
             birthday: Date.now,
             breed: "",
-            specie: "",
+            specie: .dog,
             gender: .male)
         ]))
 }
