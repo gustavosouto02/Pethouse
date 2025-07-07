@@ -114,7 +114,7 @@ struct TutorsDetailsView: View {
                         if !isEditing {
                             Text(tutor.phone)
                         } else {
-                            TextField("", text: $phone)
+                            TextField(tutor.phone, text: $phone)
                                 .multilineTextAlignment(.trailing)
                                 .foregroundStyle(.gray)
                         }
@@ -125,11 +125,23 @@ struct TutorsDetailsView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button {
-                        if isEditing && !name.isEmpty && !cpf.isEmpty && phone.isEmpty && image != nil {
-                            tutor.name = name
-                            tutor.cpf = cpf
-                            tutor.phone = phone
-                            tutor.image = image
+                        if isEditing {
+                            
+                            if !name.isEmpty {
+                                tutor.name = name
+                            }
+                            
+                            if !cpf.isEmpty {
+                                tutor.cpf = cpf
+                            }
+                            
+                            if !phone.isEmpty {
+                                tutor.phone = phone
+                            }
+                            
+                            if image != nil {
+                                tutor.image = image
+                            }
                         }
                         
                         isEditing.toggle()
