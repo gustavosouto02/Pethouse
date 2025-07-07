@@ -15,7 +15,7 @@ class Pet: Identifiable, Hashable {
     var name: String
     var birthday: Date
     var breed: String //raça
-    var specie: String // especie
+    var specie: Specie // especie
     var gender: Gender
     var details: String?
     var tutors: [Tutor]
@@ -23,7 +23,7 @@ class Pet: Identifiable, Hashable {
     
     @Relationship(deleteRule: .cascade, inverse: \Schedule.pet) var schedules: [Schedule]?
 
-    init(name: String, birthday: Date, breed: String, specie: String, gender: Gender, details: String = "", tutors: [Tutor] = [], image: Data? = nil) {
+    init(name: String, birthday: Date, breed: String, specie: Specie, gender: Gender, details: String = "", tutors: [Tutor] = [], image: Data? = nil) {
         self.name = name
         self.birthday = birthday
         self.breed = breed
@@ -38,16 +38,23 @@ class Pet: Identifiable, Hashable {
         self.name = ""
         self.birthday = .now
         self.breed = ""
-        self.specie = ""
+        self.specie = .dog
         self.gender = .female
         self.details = ""
         self.tutors = []
     }
 }
 
-enum Gender: String, CaseIterable, Identifiable, Codable{
+enum Gender: String, CaseIterable, Identifiable, Codable {
     var id: String { self.rawValue }
     
     case male = "Macho"
     case female = "Fêmea"
+}
+
+enum Specie: String, CaseIterable, Identifiable, Codable {
+    var id: String { self.rawValue }
+    
+    case dog = "Cachorro"
+    case cat = "Gato"
 }

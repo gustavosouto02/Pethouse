@@ -26,7 +26,7 @@ struct CardHomeView: View {
                         .foregroundStyle(Color("PurpleStatus"))
                         .frame(width: 40, height: 40)
                         .overlay(content: {
-                            Image(systemName: "dog.fill")
+                            Image(systemName: schedule.pet.specie == .cat ? "cat.fill" : "dog.fill")
                                 .foregroundStyle(Color.white)
                         })
                 }
@@ -35,11 +35,13 @@ struct CardHomeView: View {
                     .font(.subheadline)
             }
 
-            HStack {
-               
-                Text("Tutor: \(schedule.pet.tutors[0].name)")
-                    .font(.footnote)
-                    .foregroundStyle(Color.gray)
+            if(!schedule.pet.tutors.isEmpty) {
+                HStack {
+                   
+                    Text("Tutor: \(schedule.pet.tutors[0].name)")
+                        .font(.footnote)
+                        .foregroundStyle(Color.gray)
+                }
             }
 
             HStack {
@@ -77,12 +79,6 @@ struct CardHomeView: View {
                 .fill(Color.white)
 
         )
-
-        //		.overlay(
-        //			RoundedRectangle(cornerRadius: 20)
-        //				.stroke(Color.accentColor, lineWidth: 1.5)
-        //
-        //		)
 
     }
 }

@@ -29,8 +29,8 @@ struct PetsView: View {
                         ForEach(viewModel.pets) { pet in
                             PetCard(pet: pet)
                                 .onTapGesture {
-                                    presentDetailsSheet.toggle()
                                     selectedPet = pet
+                                    presentDetailsSheet = true
                                 }
                                 .buttonStyle(.plain)
                                 .listRowSeparator(.hidden)
@@ -87,11 +87,15 @@ struct PetsView: View {
             .sheet(isPresented: $presentDetailsSheet) {
                 if let viewModel = viewModel {
                     if let pet = selectedPet {
-                        DetailsView(pet: pet, deleteTutor: viewModel.deleteTutor)
+                        NavigationStack {
+                            DetailsView(pet: pet, deleteTutor: viewModel.deleteTutor)
+                        }
                     }
                 }
             }
-            
+            .onChange(of: presentDetailsSheet) { oldValue, newValue in
+               //
+            }
            
         }
         

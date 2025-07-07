@@ -13,8 +13,8 @@ struct HomeView: View {
     @State var viewModel = HomeViewModel()
     @AppStorage("didInsertDefaultReflections") var didInsertDefaults = false
     @Environment(\.modelContext) var context
-    @State var showCardView: Bool = false
     @State var scheduleEdtit: Schedule?
+    @State private var presentScheduleView = false
 
     @Query var schedules: [Schedule]
 
@@ -62,7 +62,7 @@ struct HomeView: View {
                                 HStack {
                                     ForEach(current) { schedule in
                                         Button {
-                                            showCardView = true
+                                            presentScheduleView = true
                                             scheduleEdtit = schedule
                                         } label: {
                                             CardHomeView(schedule: schedule)
@@ -87,7 +87,7 @@ struct HomeView: View {
                                 HStack {
                                     ForEach(future) { schedule in
                                         Button {
-                                            showCardView = true
+                                            presentScheduleView = true
                                             scheduleEdtit = schedule
                                         } label: {
                                             CardHomeView(schedule: schedule)
@@ -120,7 +120,7 @@ struct HomeView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        viewModel.showAddSchedule = true
+                        presentScheduleView = true
                     } label: {
                         AddScheduleButton()
                     }
@@ -129,17 +129,14 @@ struct HomeView: View {
             .navigationDestination(isPresented: $viewModel.showAddSchedule) {
                 AddScheduleView()
             }
-            .navigationDestination(
-                item: $scheduleEdtit,
-                destination: { schedule in
-                    AddScheduleView(scheduletoEdit: schedule)
-                }
-            )
             .onAppear {
                 viewModel.insertDefaultDataIfNeeded(
                     context: context,
                     didInsertDefaults: &didInsertDefaults
                 )
+            }
+            .sheet(isPresented: $presentScheduleView) {
+                AddScheduleView(scheduletoEdit: scheduleEdtit)
             }
         }
     }

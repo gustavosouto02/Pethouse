@@ -25,11 +25,18 @@ struct AddScheduleView: View {
                     .ignoresSafeArea(edges: .all)
                 VStack {
                     Form {
-                        
                         Section{
                             HStack {
                                 Spacer()
-                                PhotoComponent()
+                                if let data = viewModel.pet.image, let image = UIImage(data: data) {
+                                    Image(uiImage: image)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 150, height: 150)
+                                        .clipShape(Circle())
+                                } else {
+                                    PhotoComponent()
+                                }
                                 Spacer()
                             }
                             .listRowInsets(.none)
@@ -154,7 +161,16 @@ struct AddScheduleView: View {
             }
 
             .toolbar {
-                ToolbarItem(placement: .primaryAction) {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Text("Cancelar")
+                    }
+                    .foregroundStyle(.red)
+                }
+                
+                ToolbarItem(placement: .confirmationAction) {
                     Button {
                         if let scheduletoEdit = scheduletoEdit {
                             viewModel.updateSchedule(
@@ -170,6 +186,7 @@ struct AddScheduleView: View {
                     } label: {
                         Text("Salvar")
                     }
+                    .disabled(viewModel.pet.name.isEmpty)
                     
                 }
             }
