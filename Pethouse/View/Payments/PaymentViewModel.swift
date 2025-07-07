@@ -54,10 +54,16 @@ struct CardPayment: View {
 
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .top, spacing: 20) {
-                Image(systemName: "person.crop.circle")
-                    .resizable()
-                    .frame(width: 50, height: 50)
-                    .clipShape(Circle())
+                
+                if let data = schedule.pet.tutors.first?.image, let image = UIImage(data: data) {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 60, height: 60)
+                        .clipShape(Circle())
+                } else {
+                    PhotoComponent()
+                }
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(pet.tutors.first?.name ?? "Tutor desconhecido")
